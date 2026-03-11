@@ -1,5 +1,8 @@
 <script setup lang="ts">
 /* eslint-disable */
+// 以上为一个注释指令，
+// 告诉 ESLint（一个代码检查工具）忽略这个文件的所有规则，
+// 通常是为了避免一些不必要的警告。
 import { reactive, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { useCommonsStore } from '@/stores/commons'
@@ -15,12 +18,14 @@ const commonsStore = useCommonsStore()
 
 //left nav
 
+// 这个对象用于存储当前显示的步骤页面的标题和副标题
 let nowContent: IContent = reactive({
   id: '',
   title: '',
   semititle: '',
 })
 
+// 用于切换当前显示的步骤
 const setTabContent = (tabId: string) => {
   commonsStore.setTabActive(tabId)
 
@@ -47,7 +52,6 @@ const goBack = (): void => {
 }
 
 // step2
-
 const isYearly: Ref<boolean> = ref(false)
 
 const setOptions = () => {
@@ -68,9 +72,17 @@ const setSelectedOptions = () => {
 }
 
 const sumCost = () => {
+  // 1. 获取当前选中套餐的价格
+
+  // replace(/[^0-9]/g, '') 的作用是：
+  // 从一个字符串中提取出所有的数字字符，
+  // 并将它们拼接成一个新的字符串，
+  // 任何非数字的字符都会被过滤掉
   const planCost: string = isYearly.value
     ? _.cloneDeep(nowPlan.value).yearly.replace(/[^0-9]/g, '')
     : _.cloneDeep(nowPlan.value).monthly.replace(/[^0-9]/g, '')
+
+  // 2. 计算所有已选附加服务的价格总和
   let addonCosts: Array<number> = []
   commonsStore.addons.forEach((addon: IStep3) => {
     isYearly.value
@@ -97,6 +109,7 @@ watch(
 )
 
 // validation check
+// 表单验证逻辑
 
 // step1
 const validation: any = reactive({
@@ -146,8 +159,7 @@ watch(
   { deep: true },
 )
 
-// 함수 실행부
-
+// 初始化执行
 setTabContent('1')
 </script>
 
