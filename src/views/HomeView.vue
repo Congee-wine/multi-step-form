@@ -7,9 +7,9 @@ import { IContent } from '@/types/content'
 import _ from 'lodash'
 import { IStep2, IStep3 } from '@/types/items'
 
-const tabs = require('@/assets/data/tabs-info.json')
-const content = require('@/assets/data/content.json')
-const items = require('@/assets/data/items.json')
+import tabs from '@/assets/data/tabs-info.json'
+import content from '@/assets/data/content.json'
+import items from '@/assets/data/items.json'
 
 const commonsStore = useCommonsStore()
 
