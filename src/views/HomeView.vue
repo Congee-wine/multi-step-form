@@ -3,7 +3,7 @@
 // 以上为一个注释指令，
 // 告诉 ESLint（一个代码检查工具）忽略这个文件的所有规则，
 // 通常是为了避免一些不必要的警告。
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { useCommonsStore } from '@/stores/commons'
 import { IContent } from '@/types/content'
@@ -13,6 +13,7 @@ import { IStep2, IStep3 } from '@/types/items'
 import tabs from '@/assets/data/tabs-info.json'
 import content from '@/assets/data/content.json'
 import items from '@/assets/data/items.json'
+import { storeToRefs } from 'pinia'
 
 const commonsStore = useCommonsStore()
 
@@ -52,24 +53,34 @@ const goBack = (): void => {
 }
 
 // step2
-const isYearly: Ref<boolean> = ref(false)
+// let isYearly = computed(() => commonsStore.isYearly)
+const { isYearly } = storeToRefs(commonsStore)
 
 const setOptions = () => {
-  isYearly.value = !isYearly.value
+  // isYearly = !isYearly
+  commonsStore.toggleYearly()
+  console.log(isYearly.value)
 }
 
 // step4
-let totalCost: Ref<string> = ref('')
-let nowPlan: Ref<IStep2> = ref(_.cloneDeep(items.STEP2[0]))
+const { totalCost } = storeToRefs(commonsStore)
+// let nowPlan: Ref<IStep2> = ref(_.cloneDeep(items.STEP2[0]))
 
-const setSelectedOptions = () => {
-  items.STEP2.forEach((item: IStep2) => {
-    if (item.id === commonsStore.plan) {
-      nowPlan.value = item
-    }
-  })
-  sumCost()
-}
+// const setSelectedOptions = () => {
+//   items.STEP2.forEach((item: IStep2) => {
+//     if (item.id === commonsStore.plan) {
+//       nowPlan.value = item
+//     }
+//   })
+//   sumCost()
+// }
+
+const nowPlan = computed<IStep2>(() => {
+  return (
+    items.STEP2.find((item: IStep2) => item.id === commonsStore.plan) ||
+    items.STEP2[0]
+  )
+})
 
 const sumCost = () => {
   // 1. 获取当前选中套餐的价格
@@ -103,7 +114,10 @@ watch(
   () => commonsStore.nowTab,
   () => {
     if (commonsStore.nowTab === '4') {
-      setSelectedOptions()
+      sumCost()
+    }
+    if (commonsStore.nowTab === '5') {
+      commonsStore.removeStorege()
     }
   },
 )
@@ -160,7 +174,7 @@ watch(
 )
 
 // 初始化执行
-setTabContent('1')
+setTabContent(commonsStore.nowTab)
 </script>
 
 <template>
@@ -294,7 +308,7 @@ setTabContent('1')
                     <input
                       type="checkbox"
                       id="toggle"
-                      :value="isYearly"
+                      :checked="isYearly"
                       @change="setOptions"
                       hidden
                     />
@@ -315,14 +329,22 @@ setTabContent('1')
                   :key="addon.id"
                   :class="[
                     'addon non-selected',
-                    { selected: commonsStore.addons.indexOf(addon) !== -1 },
+                    {
+                      selected: commonsStore.addons.some(
+                        (item) => item.id === addon.id,
+                      ),
+                    },
                   ]"
                   @click="commonsStore.setAddonItems(addon)"
                 >
                   <span
                     :class="[
                       'checkbox',
-                      { check: commonsStore.addons.indexOf(addon) !== -1 },
+                      {
+                        check: commonsStore.addons.some(
+                          (item) => item.id === addon.id,
+                        ),
+                      },
                     ]"
                   >
                     <img src="@/assets/images/icon-checkmark.svg" />
@@ -390,7 +412,7 @@ setTabContent('1')
 
             <!--          Thank you page          -->
             <div v-if="commonsStore.nowTab === '5'">
-              <diV class="appreciate">
+              <div class="appreciate">
                 <img
                   src="@/assets/images/icon-thank-you.svg"
                   class="thankyou-icon"
@@ -400,7 +422,7 @@ setTabContent('1')
                   感谢您确认订阅！我们希望您使用愉快。如果您需要任何支持，请随时发送电子邮件至
                   support@loremgaming.com 联系我们。
                 </div>
-              </diV>
+              </div>
             </div>
           </div>
           <div
