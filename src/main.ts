@@ -22,7 +22,6 @@ const now = Date.now()
 const sevenDays = 7 * 24 * 60 * 60 * 1000
 if (commonsStore.savedAt && now - commonsStore.savedAt > sevenDays) {
   commonsStore.clearStorage()
-  // commonsStore.removeStorege()
 }
 
 app.mount('#app')

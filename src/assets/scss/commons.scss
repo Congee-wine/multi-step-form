@@ -1,526 +1,531 @@
 body {
-    min-height: 100%;
-    min-width: 1024px;
-    width: 100%;
-    height: auto;
+  min-height: 100%;
+  min-width: 1024px;
+  width: 100%;
+  height: auto;
 
-    background-color: #EEF5FF;
+  background-color: #eef5ff;
 }
 
 ul li {
-    list-style: none;
+  list-style: none;
 }
 
 ul {
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    margin: 12px 0;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 12px 0;
 }
 
 // 左侧导航垂直布局
 .navbar ul {
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 20px 0;
-    padding-left: 30px;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 20px 0;
+  padding-left: 30px;
 }
 
 input {
-    cursor:pointer;
+  cursor: pointer;
 }
 
 .none {
-    display: none;
+  display: none;
 }
 
 //button css
 .non-selected {
-    background-color: white;
-    border: 1px solid #D9D9DB;
-    border-radius: 10px;
-    cursor: pointer;
+  background-color: white;
+  border: 1px solid #d9d9db;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .non-selected:hover {
-    transition: all 0.2s ease-in;
-    border: 1px solid #534D93 !important;
+  transition: all 0.2s ease-in;
+  border: 1px solid #534d93 !important;
 }
 
 .selected {
-    background-color: #F8F9FE;
-    border: 1px solid #534D93;
+  background-color: #f8f9fe;
+  border: 1px solid #534d93;
 }
 
 // card
 .card-nm {
-    font-family: "ubuntu-bold";
-    font-size: 16px;
-    color: #1A365B;
+  font-family: 'ubuntu-bold';
+  font-size: 16px;
+  color: #1a365b;
 }
 
 .card-des {
-    font-size: 14px;
-    color: #95969B;
+  font-size: 14px;
+  color: #95969b;
 }
 
 //margin
 .mg-lft {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 //text
 .impt-txt {
-    font-family: "ubuntu-bold";
-    color: #1A365B;
+  font-family: 'ubuntu-bold';
+  color: #1a365b;
 }
 
 //font
 
 @font-face {
-    font-family: "ubuntu-regular";
-    src: url("@/assets/fonts/Ubuntu-Regular.ttf")
+  font-family: 'ubuntu-regular';
+  src: url('@/assets/fonts/Ubuntu-Regular.ttf');
 }
 
 @font-face {
-    font-family: "ubuntu-medium";
-    src: url("@/assets/fonts/Ubuntu-Medium.ttf")
+  font-family: 'ubuntu-medium';
+  src: url('@/assets/fonts/Ubuntu-Medium.ttf');
 }
 
 @font-face {
-    font-family: "ubuntu-bold";
-    src: url("@/assets/fonts/Ubuntu-Bold.ttf")
+  font-family: 'ubuntu-bold';
+  src: url('@/assets/fonts/Ubuntu-Bold.ttf');
 }
 
 // desktop
 
 #container {
-    width: 970px;
-    height: 600px;
-    position: absolute;
+  width: 970px;
+  height: 600px;
+  position: absolute;
 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    @media (min-width: 971px) {
-        .box{
-            background-color: white;
-            width: 100%;
-            height: 100%;
+  @media (min-width: 971px) {
+    .box {
+      background-color: white;
+      width: 100%;
+      height: 100%;
 
-            border-radius: 20px;
-            box-shadow: 1px 4px 11px rgb(213, 213, 213);
+      border-radius: 20px;
+      box-shadow: 1px 4px 11px rgb(213, 213, 213);
 
-            box-sizing: border-box;
+      box-sizing: border-box;
 
-            display: grid;
-            grid-template-columns: 300px 610px;
-        }
+      display: grid;
+      grid-template-columns: 300px 610px;
     }
+  }
 }
 
 .navbar {
-    width: 274px;
-    height: 586px;
-    background-image: url('@/assets/images/bg-sidebar-desktop.svg');
-    background-repeat: no-repeat;
+  width: 274px;
+  height: 586px;
+  background-image: url('@/assets/images/bg-sidebar-desktop.svg');
+  background-repeat: no-repeat;
 
-    margin: 15px;
-    padding-top: 20px;
+  margin: 15px;
+  padding-top: 20px;
 }
 
 .step {
-    display: flex;
-    align-items: center;
-    color: white;
-    margin-bottom: 24px;
-    margin-left: -10px;
+  display: flex;
+  align-items: center;
+  color: white;
+  margin-bottom: 24px;
+  margin-left: -10px;
 
-    .num {
-        border: 1px solid #BDE2FD;
-        border-radius: 50%;
-        padding: 7px 12px;
-        font-family: "ubuntu-bold";
+  .num {
+    border: 1px solid #bde2fd;
+    border-radius: 50%;
+    padding: 7px 12px;
+    font-family: 'ubuntu-bold';
+  }
+
+  .clicked {
+    background-color: #bde2fd;
+    color: #12335e;
+  }
+
+  .item {
+    margin-left: 16px;
+    line-height: 18px;
+
+    .step-nm {
+      font-size: 12px;
+      font-family: 'ubuntu-regular';
+      color: #a8a7ff;
     }
 
-    .clicked {
-        background-color: #BDE2FD;
-        color: #12335E;
+    .name {
+      font-family: 'ubuntu-bold';
+      font-size: 15px;
+      letter-spacing: 1px;
     }
-
-    .item {
-        margin-left: 16px;
-        line-height: 18px;
-
-        .step-nm{
-            font-size: 12px;
-            font-family: "ubuntu-regular";
-            color: #A8A7FF;
-        }
-
-        .name {
-            font-family: "ubuntu-bold";
-            font-size: 15px;
-            letter-spacing: 1px;
-        }
-    }
+  }
 }
 
-@media (min-width:971px) {
+@media (min-width: 971px) {
+  .content {
+    font-family: 'ubuntu-regular';
+    display: grid;
+    grid-template-rows: 50px 55px 360px 50px;
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 
-    .content {
-        font-family: "ubuntu-regular";
-        display: grid;
-        grid-template-rows: 50px 55px 360px 50px;
-        width: 500px;
-        position: absolute;
-        top: 50%;
-        left: 38%;
-        transform: translateY(-50%);
-
-        .title {
-            font-family: "ubuntu-bold";
-            font-size: 30px;
-            color: #1A365B;
-        }
-
-        .semi-title {
-            color: #95969B;
-        }
+    .title {
+      font-family: 'ubuntu-bold';
+      font-size: 30px;
+      color: #1a365b;
     }
 
+    .semi-title {
+      color: #95969b;
+    }
+  }
 }
-
 
 // 文本表单
 .form {
-    margin-bottom: 20px;
-    label {
-        font-size: 14px;
-    }
+  margin-bottom: 20px;
+  label {
+    font-size: 14px;
+  }
 }
 
 .labels {
-    display: flex;
-    margin-bottom: 7px;
+  display: flex;
+  margin-bottom: 7px;
 }
 
 .alert {
-    margin-left: auto;
-    color: #9D5A63;
-    font-family: "ubuntu-bold";
+  margin-left: auto;
+  color: #9d5a63;
+  font-family: 'ubuntu-bold';
 }
 
 .form {
-    input {
-        font-family: "ubuntu-bold";
-        border: 1px solid #D9D9DB;
-        border-radius: 10px;
-        padding: 15px;
-        width: calc(100% - 30px);
-        font-size: 16px;
-        color: #1A365B;
-    }
+  .input-wrapper {
+    position: relative;
 
-    input:focus {
-        transition: all 0.2s ease-in;
-        outline: 1px solid #534D93;
-        border: 1px solid #534D93;
+    .input-success-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      background-color: rgb(21, 175, 1);
     }
+  }
 
-    input::placeholder {
-        font-family: "ubuntu-regular";
-        color:#98979D;
-    }
+  input {
+    font-family: 'ubuntu-bold';
+    border: 1px solid #d9d9db;
+    border-radius: 10px;
+    padding: 15px;
+    width: calc(100% - 30px);
+    font-size: 16px;
+    color: #1a365b;
+  }
+
+  input:focus {
+    transition: all 0.2s ease-in;
+    outline: 1px solid #534d93;
+    border: 1px solid #534d93;
+  }
+
+  input::placeholder {
+    font-family: 'ubuntu-regular';
+    color: #98979d;
+  }
 }
 
 .error {
-    outline: 1px solid #9D5A63;
-    border: 1px solid #9D5A63;
+  outline: 1px solid #9d5a63;
+  border: 1px solid #9d5a63;
 }
 
 /* ------------------------------ STEP 2 ------------------------------ */
 
 // 3 buttons
 .options {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
-    .icon {
-        margin-bottom: 40px;
-    }
+  .icon {
+    margin-bottom: 40px;
+  }
 }
 
 .option {
-    padding: 20px 18px;
-    width: 150px;
-    //height: 170px;
-    text-align: left;
+  padding: 20px 18px;
+  width: 150px;
+  //height: 170px;
+  text-align: left;
 }
 
 .option:hover {
-    border: 1px solid #534D93;
-    transition: all 0.1s ease-in;
+  border: 1px solid #534d93;
+  transition: all 0.1s ease-in;
 }
 
 .option-nm {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .select-area {
-    padding-top: 25px;
+  padding-top: 25px;
 }
 
 .btn-area {
-    background-color: #F8F9FE;
-    padding: 15px;
+  background-color: #f8f9fe;
+  padding: 15px;
 
-    border-radius: 11px;
-    text-align: center;
-    align-items: center;
+  border-radius: 11px;
+  text-align: center;
+  align-items: center;
 }
 
 .dollar {
-    font-family: 'ubuntu-regular';
-    margin-bottom: 4px;
+  font-family: 'ubuntu-regular';
+  margin-bottom: 4px;
 }
 
 .period {
-    font-size: 14px;
-    color: #9696A0;
-    font-family: 'ubuntu-bold';
+  font-size: 14px;
+  color: #9696a0;
+  font-family: 'ubuntu-bold';
 }
 
 .m-or-y {
-    color: #1A365B;
-    transition: all 0.1s ease-in;
+  color: #1a365b;
+  transition: all 0.1s ease-in;
 }
 
 .discount {
-    color: #1A365B;
+  color: #1a365b;
 }
 
 //toggle switch
 .switch {
-    margin: 0 25px;
-    width: 38px;
-    height: 20px;
-    display: inline-block;
-    position: relative;
-    border-radius: 30px;
-    background-color: #03295A;
-    cursor:pointer;
+  margin: 0 25px;
+  width: 38px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  border-radius: 30px;
+  background-color: #03295a;
+  cursor: pointer;
 
-    top: 4px;
+  top: 4px;
 }
 
 .toggle-btn {
-    width: 12px;
-    height: 12px;
-    position: absolute;
-    top: 20%;
-    left: 10px;
-    transform: translate(-50%);
-    border-radius: 50%;
-    background: white;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 20%;
+  left: 10px;
+  transform: translate(-50%);
+  border-radius: 50%;
+  background: white;
 }
 
 #toggle:checked ~ .switch .toggle-btn {
-    left: 75%;
+  left: 75%;
 }
 
-.switch, .toggle-btn {
-    transition: all 0.2s ease-in;
+.switch,
+.toggle-btn {
+  transition: all 0.2s ease-in;
 }
-
 
 /* ------------------------------ STEP 3 ------------------------------ */
 
 .addon {
-    font-family: 'ubuntu-regular';
-    font-size: 15px;
-    display: flex;
-    padding: 17px 15px;
-    margin-bottom: 15px;
-    width: 100%;
-    align-items: center;
+  font-family: 'ubuntu-regular';
+  font-size: 15px;
+  display: flex;
+  padding: 17px 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  align-items: center;
 
-    display: grid;
-    grid-template-columns: 1fr 6fr 1fr ;
+  display: grid;
+  grid-template-columns: 1fr 6fr 1fr;
 
-    .checkbox {
-        position: relative;
-        text-align: center;
-        width: 18px;
-        height: 18px;
-        //background-color: #534D93;
-        border: 1px solid #D9D9DB;
-        border-radius: 4px;
+  .checkbox {
+    position: relative;
+    text-align: center;
+    width: 18px;
+    height: 18px;
+    //background-color: #534D93;
+    border: 1px solid #d9d9db;
+    border-radius: 4px;
 
-        img {
-            position:absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
+  }
 
-    .check {
-        background-color: #413EFF;
-        border: 1px solid #413EFF;
-        transition: all 0.05s ease-in;
-    }
+  .check {
+    background-color: #413eff;
+    border: 1px solid #413eff;
+    transition: all 0.05s ease-in;
+  }
 
-    .txts {
-        text-align: left;
-        line-height: 22px;
-    }
+  .txts {
+    text-align: left;
+    line-height: 22px;
+  }
 
-    .price {
-        font-family: 'ubuntu-medium';
-        margin-left: auto;
-        color: #5B49D9;
-    }
+  .price {
+    font-family: 'ubuntu-medium';
+    margin-left: auto;
+    color: #5b49d9;
+  }
 }
-
 
 /* ------------------------------ STEP 4 ------------------------------ */
 
 .costs {
-    background-color: #F8F9FE;
-    padding: 20px 30px;
-    border-radius: 10px;
+  background-color: #f8f9fe;
+  padding: 20px 30px;
+  border-radius: 10px;
 
-    .plan-wrap {
-        display: flex;
-        align-items: center;
+  .plan-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  .plus {
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 30px;
+  }
+
+  .plan {
+    line-height: 25px;
+    font-size: 17px;
+  }
+
+  .name {
+    display: flex;
+  }
+
+  .change-plan {
+    font-size: 15px;
+    cursor: pointer;
+    color: #9797a1;
+    text-decoration: underline;
+    text-underline-position: under;
+  }
+
+  .plan-cost {
+    line-height: 50px;
+  }
+
+  .addons {
+    display: flex;
+    color: #9797a1;
+    line-height: 37px;
+
+    .addon-cost {
+      color: #1a365b;
     }
-
-    .plus {
-        border-bottom: 1px solid lightgray;
-        padding-bottom: 30px;
-    }
-
-    .plan {
-        line-height: 25px;
-        font-size: 17px;
-    }
-
-    .name {
-        display: flex;
-    }
-
-    .change-plan {
-        font-size: 15px;
-        cursor:pointer;
-        color: #9797A1;
-        text-decoration: underline;
-        text-underline-position:under;
-    }
-
-    .plan-cost {
-        line-height: 50px;
-    }
-
-    .addons {
-        display: flex;
-        color: #9797A1;
-        line-height: 37px;
-
-        .addon-cost {
-            color: #1A365B;
-        }
-    }
+  }
 }
 
 .total {
-    padding: 30px;
-    color: #9797A1;
-    display: flex;
-    align-items: center;
+  padding: 30px;
+  color: #9797a1;
+  display: flex;
+  align-items: center;
 
-    .total-cost {
-        font-family: 'ubuntu-bold';
-        font-size: 20px;
-        color:#413EFF;
-    }
+  .total-cost {
+    font-family: 'ubuntu-bold';
+    font-size: 20px;
+    color: #413eff;
+  }
 }
-
 
 /* ------------------------------ thank you ------------------------------ */
 @media (min-width: 971px) {
-    .appreciate {
-        position: absolute;
-        text-align: center;
+  .appreciate {
+    position: absolute;
+    text-align: center;
 
-        top: 50%;
-        transform: translateY(-50%);
+    top: 50%;
+    transform: translateY(-50%);
 
-        line-height: 60px;
-    }
+    line-height: 60px;
+  }
 }
 
 .thank-you {
-    font-family: "ubuntu-bold";
-    font-size: 30px;
-    color: #1A365B;
+  font-family: 'ubuntu-bold';
+  font-size: 30px;
+  color: #1a365b;
 }
 .notice {
-    line-height: 25px;
-    color:#93939B;
+  line-height: 25px;
+  color: #93939b;
 }
-
 
 /* ------------------------------ BUTTONS ------------------------------ */
 
 @media (min-width: 971px) {
+  .rgt-btn,
+  .lft-btn {
+    cursor: pointer;
+    font-family: 'ubuntu-regular';
+    border-radius: 8px;
+    padding: 13px 18px;
+    font-size: 16px;
+  }
 
-    .rgt-btn, .lft-btn {
-        cursor:pointer;
-        font-family: "ubuntu-regular";
-        border-radius: 8px;
-        padding: 13px 18px;
-        font-size: 16px;
-    }
-
-    .rgt-btn {
-        width: 110.24px;
-        float: right;
-        color: white;
-        background-color: #03295A;
-        border: 1px solid #03295A;
-    }
-
+  .rgt-btn {
+    width: 110.24px;
+    float: right;
+    color: white;
+    background-color: #03295a;
+    border: 1px solid #03295a;
+  }
 }
 
 .lft-btn {
-    color: #93939B;
-    background-color: white;
-    border: 1px solid white;
+  color: #93939b;
+  background-color: white;
+  border: 1px solid white;
 }
 
-
 .rgt-btn:hover {
-    background-color: #174A89;
-    border: 1px solid #174A89;
+  background-color: #174a89;
+  border: 1px solid #174a89;
 }
 
 .confirm {
-    background-color: #413EFF !important;
-    border: 1px solid #413EFF !important;
+  background-color: #413eff !important;
+  border: 1px solid #413eff !important;
 }
 
 .confirm:hover {
-    background-color: #6865ff !important;
-    border: 1px solid #6865ff !important;
+  background-color: #6865ff !important;
+  border: 1px solid #6865ff !important;
 }
 
 .lft-btn:hover {
-    color: #03295A;
+  color: #03295a;
 }
-
-
 
 /* ------------------------------------------------------------------------------------------------------------------------
 
@@ -528,261 +533,260 @@ input {
 
 ------------------------------------------------------------------------------------------------------------------------ */
 
-
 @media (max-width: 971px) {
+  body {
+    background-color: white;
+  }
 
-    body {
-        background-color: white;
+  #container {
+    width: 375px;
+    background-color: #eef5ff;
+    height: 100vh;
+    min-height: 667px;
+
+    .box {
+      border-radius: 0px;
+      display: grid;
+      grid-template-rows: 100px;
+      box-sizing: border-box;
+    }
+  }
+
+  .navbar {
+    width: 375px;
+    height: 152px;
+    margin: 0;
+    background-image: url('@/assets/images/bg-sidebar-mobile.svg');
+
+    ul {
+      flex-direction: row !important;
+      justify-content: flex-start !important;
     }
 
-    #container {
-        width: 375px;
-        background-color: #EEF5FF;
-        height: 100vh;
-        min-height: 667px;
-
-        .box {
-            border-radius: 0px;
-            display: grid;
-            grid-template-rows: 100px;
-            box-sizing: border-box;
-        }
-    }
-
-    .navbar {
-        width: 375px;
-        height: 152px;
+    .step {
+      margin: 0;
+      .num {
+        padding: 7px 13px;
+        margin: 0px 8px;
+        display: flex;
+      }
+      .item {
         margin: 0;
-        background-image: url('@/assets/images/bg-sidebar-mobile.svg');
+        display: none;
+      }
+    }
+  }
 
-        ul {
-            flex-direction: row !important;
-            justify-content: flex-start !important;
-        }
+  .content {
+    font-family: 'ubuntu-regular';
+    background-color: white;
+    border-radius: 10px;
+    //width: 290px;
+    height: auto;
+    padding: 27px 25px;
+    display: inline-block;
 
-        .step {
-            margin: 0;
-            .num {
-                padding: 7px 13px;
-                margin: 0px 8px;
-                display: flex;
-            }
-            .item {
-                margin: 0;
-                display: none;
-            }
-        }
+    box-shadow: 0 8px 10px -4px rgb(213, 213, 213);
+
+    margin: auto;
+
+    .title {
+      font-family: 'ubuntu-bold';
+      font-size: 24px;
+      color: #1a365b;
     }
 
-    .content {
-        font-family: "ubuntu-regular";
-        background-color: white;
-        border-radius: 10px;
-        //width: 290px;
-        height: auto;
-        padding: 27px 25px;
-        display: inline-block;
+    .semi-title {
+      color: #95969b;
+      width: 280px;
+      line-height: 23px;
+    }
+  }
 
-        box-shadow: 0 8px 10px -4px rgb(213, 213, 213);
+  // step1
+  .top-area {
+    margin-bottom: 10px;
+  }
 
-        margin: auto;
+  .forms {
+    margin: 17px 0px;
 
-        .title {
-            font-family: "ubuntu-bold";
-            font-size: 24px;
-            color: #1A365B;
-        }
-
-        .semi-title {
-            color: #95969B;
-            width: 280px;
-            line-height: 23px;
-        }
+    .form {
+      margin: 10px 0;
     }
 
-    // step1
-    .top-area {
-        margin-bottom: 10px;
+    .labels {
+      font-size: 8px;
+      margin: 4px 0;
     }
 
-    .forms {
-        margin: 17px 0px;
+    .label-name {
+      color: #215390;
+    }
+  }
 
-        .form {
-            margin: 10px 0;
-        }
+  // step2
+  .options {
+    display: block;
 
-        .labels {
-            font-size: 8px;
-            margin: 4px 0;
-        }
-
-        .label-name {
-            color:#215390;
-        }
+    .icon {
+      margin: 0;
     }
 
-    // step2
-    .options {
-        display: block;
+    .option {
+      display: flex;
+      padding: 16px 18px;
+      width: 100%;
+      margin-bottom: 13px;
 
-        .icon {
-            margin: 0;
-        }
+      .info {
+        margin-left: 14px;
+        line-height: 20px;
+      }
 
-        .option {
-            display: flex;
-            padding: 16px 18px;
-            width: 100%;
-            margin-bottom: 13px;
+      .option-nm {
+        margin: 0;
+      }
 
-            .info {
-                margin-left: 14px;
-                line-height: 20px;
-            }
+      .dollar {
+        margin: 0;
+      }
+    }
+  }
 
-            .option-nm {
-                margin: 0;
-            }
+  .btn-area {
+    padding: 8px;
+  }
 
-            .dollar {
-                margin: 0;
-            }
-        }
+  .select-area {
+    padding-top: 0px;
+  }
+
+  //step3
+  .third-step {
+    .addons {
+      .addon {
+        padding: 13px 15px;
+      }
+
+      .txts {
+        line-height: 20px;
+      }
+
+      .card-nm {
+        letter-spacing: -0.5px;
+        font-size: 15px;
+      }
+
+      .card-des {
+        font-size: 12px;
+      }
+
+      .price {
+        font-size: 13px;
+      }
+    }
+  }
+
+  //step4
+  .costs {
+    padding: 10px 20px;
+
+    .plan,
+    .plan-cost {
+      font-size: 14px;
     }
 
-    .btn-area {
-        padding: 8px;
+    .plan {
+      line-height: 20px;
     }
 
-    .select-area {
-        padding-top: 0px;
+    .plus {
+      padding-bottom: 12px;
     }
 
-    //step3
-    .third-step {
-        .addons {
-            .addon {
-                padding: 13px 15px;
-            }
+    .addon-wrap {
+      padding-top: 8px;
+      font-size: 14px;
 
-            .txts {
-                line-height: 20px;
-            }
+      .addons {
+        line-height: 30px;
+      }
+    }
+  }
 
-            .card-nm {
-                letter-spacing: -0.5px;
-                font-size: 15px;
-            }
+  .total {
+    font-size: 14px;
+    padding: 20px;
 
-            .card-des {
-                font-size: 12px;
-            }
+    .total-cost {
+      font-family: 'ubuntu-bold';
+      font-size: 18px;
+      color: #413eff;
+    }
+  }
 
-            .price {
-                font-size: 13px;
-            }
-        }
+  //thankyou
+  .appreciate {
+    .notice {
+      width: 290px;
+    }
+  }
+
+  // bottom buttons
+  .btns {
+    position: absolute;
+    background-color: white;
+
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0px;
+
+    width: 100%;
+    height: 70px;
+
+    .rgt-btn,
+    .lft-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+
+      cursor: pointer;
+      font-family: 'ubuntu-regular';
+      border-radius: 4px;
+      padding: 12px 0;
+      font-size: 14px;
     }
 
-    //step4
-    .costs{
-        padding: 10px 20px;
-
-        .plan, .plan-cost {
-            font-size: 14px;
-        }
-
-        .plan {
-            line-height: 20px;
-        }
-
-        .plus {
-            padding-bottom: 12px;
-        }
-
-        .addon-wrap {
-            padding-top: 8px;
-            font-size: 14px;
-
-            .addons {
-                line-height: 30px;
-            }
-        }
+    .rgt-btn {
+      width: 92.84px;
+      right: 15px;
+      color: white;
+      background-color: #03295a;
+      border: 1px solid #03295a;
     }
 
-    .total {
-        font-size: 14px;
-        padding: 20px;
+    .lft-btn {
+      left: 12px;
+    }
+  }
 
-        .total-cost {
-            font-family: 'ubuntu-bold';
-            font-size: 18px;
-            color:#413EFF;
-        }
+  .appreciate {
+    text-align: center;
+    margin: 70px 0;
+    line-height: 40px;
+
+    .thankyou-icon {
+      width: 60px;
     }
 
-    //thankyou
-    .appreciate {
-        .notice {
-            width: 290px;
-        }
+    .thank-you {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
 
-    // bottom buttons
-    .btns {
-        position: absolute;
-        background-color: white;
-
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 0px;
-
-        width: 100%;
-        height: 70px;
-
-        .rgt-btn, .lft-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-
-            cursor:pointer;
-            font-family: "ubuntu-regular";
-            border-radius: 4px;
-            padding: 12px 0;
-            font-size: 14px;
-        }
-
-        .rgt-btn {
-            width: 92.84px;
-            right: 15px;
-            color: white;
-            background-color: #03295A;
-            border: 1px solid #03295A;
-        }
-
-        .lft-btn {
-            left: 12px;
-        }
+    .notice {
+      font-size: 16px;
     }
-
-
-    .appreciate {
-        text-align: center;
-        margin: 70px 0;
-        line-height: 40px;
-
-        .thankyou-icon{
-            width: 60px;
-        }
-
-        .thank-you {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .notice {
-            font-size: 16px;
-        }
-    }
+  }
 }

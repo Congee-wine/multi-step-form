@@ -3,17 +3,17 @@
 // 以上为一个注释指令，
 // 告诉 ESLint（一个代码检查工具）忽略这个文件的所有规则，
 // 通常是为了避免一些不必要的警告。
-import { computed, reactive, ref, watch } from 'vue'
-import type { Ref } from 'vue'
+import { computed, ref, reactive, watch, onMounted } from 'vue'
 import { useCommonsStore } from '@/stores/commons'
 import { IContent } from '@/types/content'
 import _ from 'lodash'
 import { IStep2, IStep3 } from '@/types/items'
+import { storeToRefs } from 'pinia'
+import { isValidEmail, isValidPhone } from '@/utils/validators'
 
 import tabs from '@/assets/data/tabs-info.json'
 import content from '@/assets/data/content.json'
 import items from '@/assets/data/items.json'
-import { storeToRefs } from 'pinia'
 
 const commonsStore = useCommonsStore()
 
@@ -64,16 +64,6 @@ const setOptions = () => {
 
 // step4
 const { totalCost } = storeToRefs(commonsStore)
-// let nowPlan: Ref<IStep2> = ref(_.cloneDeep(items.STEP2[0]))
-
-// const setSelectedOptions = () => {
-//   items.STEP2.forEach((item: IStep2) => {
-//     if (item.id === commonsStore.plan) {
-//       nowPlan.value = item
-//     }
-//   })
-//   sumCost()
-// }
 
 const nowPlan = computed<IStep2>(() => {
   return (
@@ -124,54 +114,122 @@ watch(
 
 // validation check
 // 表单验证逻辑
-
-// step1
-const validation: any = reactive({
-  nameVal: true,
-  emailVal: true,
-  phoneVal: true,
+const touched = reactive({
+  name: !!commonsStore.personalInfo.name,
+  email: !!commonsStore.personalInfo.email,
+  phone: !!commonsStore.personalInfo.phone,
 })
 
-const checkForm = () => {
-  if (_.isEmpty(commonsStore.personalInfo.name)) {
-    validation.nameVal = false
-    return false
-  } else {
-    validation.nameVal = true
-  }
+// 表单校验防抖
+// 1. 创建“延迟输入值”，不直接验证 commonsStore 的值
+const debouncedForm = reactive({
+  name: '',
+  email: '',
+  phone: '',
+})
 
-  if (_.isEmpty(commonsStore.personalInfo.email)) {
-    validation.emailVal = false
-    return false
-  } else {
-    validation.emailVal = true
-  }
+onMounted(() => {
+  debouncedForm.name = commonsStore.personalInfo.name
+  debouncedForm.email = commonsStore.personalInfo.email
+  debouncedForm.phone = commonsStore.personalInfo.phone
+})
 
-  if (_.isEmpty(commonsStore.personalInfo.phone)) {
-    validation.phoneVal = false
-    return false
-  } else {
-    validation.phoneVal = true
-  }
+// 2. 创建防抖更新函数
+const updateDebouncedForm = _.debounce(() => {
+  debouncedForm.name = commonsStore.personalInfo.name
+  debouncedForm.email = commonsStore.personalInfo.email
+  debouncedForm.phone = commonsStore.personalInfo.phone
+}, 300)
 
-  return true
-}
-
+// 3. watch 用户输入
 watch(
   () => commonsStore.personalInfo,
   () => {
-    if (!_.isEmpty(commonsStore.personalInfo.name)) {
-      validation.nameVal = true
-    }
-    if (!_.isEmpty(commonsStore.personalInfo.email)) {
-      validation.emailVal = true
-    }
-    if (!_.isEmpty(commonsStore.personalInfo.phone)) {
-      validation.phoneVal = true
-    }
+    updateDebouncedForm()
   },
-  { deep: true },
+  { deep: true, immediate: true },
 )
+
+// 4. computed 使用 debouncedForm 做验证
+
+const nameValidation = computed(() => {
+  if (!touched.name) return { required: true, success: true }
+
+  const name = debouncedForm.name
+
+  const required = !_.isEmpty(name)
+
+  return {
+    required,
+    success: required,
+  }
+})
+
+const emailValidation = computed(() => {
+  if (!touched.email) return { required: true, success: true }
+
+  const email = debouncedForm.email
+
+  const required = !_.isEmpty(email)
+  const format = isValidEmail(email)
+
+  return {
+    required,
+    format,
+    success: required && format,
+  }
+})
+
+const phoneValidation = computed(() => {
+  if (!touched.phone) return { required: true, success: true }
+
+  const phone = debouncedForm.phone
+
+  const required = !_.isEmpty(phone)
+  const format = isValidPhone(phone)
+
+  return {
+    required,
+    format,
+    success: required && format,
+  }
+})
+
+const validation = computed(() => ({
+  name: nameValidation.value,
+  email: emailValidation.value,
+  phone: phoneValidation.value,
+}))
+
+const isFormValid = computed(() => {
+  return (
+    validation.value.name.success &&
+    validation.value.email.success &&
+    validation.value.phone.success
+  )
+})
+
+const checkForm = () => {
+  return isFormValid.value
+}
+
+// 动态错误消息
+const createErrorMessage = (
+  field: 'name' | 'email' | 'phone',
+  messages?: string,
+) => {
+  return computed(() => {
+    const fieldValidation = validation.value[field]
+
+    if (!fieldValidation.required) {
+      return '此字段为必填项'
+    } else if ('format' in fieldValidation && !fieldValidation.format) {
+      return messages
+    }
+
+    return ''
+  })
+}
 
 // 初始化执行
 setTabContent(commonsStore.nowTab)
@@ -212,19 +270,33 @@ setTabContent(commonsStore.nowTab)
                   <label for="name" class="label-name">姓名</label>
                   <label
                     for="name"
-                    v-if="validation.nameVal === false"
+                    v-if="touched.name && validation.name.required === false"
                     class="alert"
-                    >此字段为必填项</label
                   >
+                    {{ createErrorMessage('name') }}
+                  </label>
                 </div>
-                <input
-                  v-model="commonsStore.personalInfo.name"
-                  type="text"
-                  id="name"
-                  placeholder="例如：张三"
-                  :class="[{ error: validation.nameVal === false }]"
-                  required
-                />
+                <div class="input-wrapper">
+                  <input
+                    v-model="commonsStore.personalInfo.name"
+                    type="text"
+                    id="name"
+                    @blur="touched.name = true"
+                    placeholder="例如：张三"
+                    :class="[
+                      {
+                        error:
+                          touched.name && validation.name.required === false,
+                      },
+                    ]"
+                    required
+                  />
+                  <img
+                    v-if="touched.name && validation.name.success"
+                    src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon"
+                  />
+                </div>
               </div>
 
               <div class="form form-email">
@@ -232,19 +304,33 @@ setTabContent(commonsStore.nowTab)
                   <label for="email" class="label-name">电子邮件地址</label>
                   <label
                     for="email"
-                    v-if="validation.emailVal === false"
+                    v-if="touched.email && validation.email.success === false"
                     class="alert"
-                    >此字段为必填项</label
                   >
+                    {{ createErrorMessage('email', '邮箱格式不正确') }}
+                  </label>
                 </div>
-                <input
-                  v-model="commonsStore.personalInfo.email"
-                  type="text"
-                  id="email"
-                  placeholder="例如：zhangsan@example.com"
-                  :class="[{ error: validation.emailVal === false }]"
-                  required
-                />
+                <div class="input-wrapper">
+                  <input
+                    v-model="commonsStore.personalInfo.email"
+                    type="text"
+                    id="email"
+                    @blur="touched.email = true"
+                    placeholder="例如：zhangsan@example.com"
+                    :class="[
+                      {
+                        error:
+                          touched.email && validation.email.success === false,
+                      },
+                    ]"
+                    required
+                  />
+                  <img
+                    v-if="touched.email && validation.email.success"
+                    src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon"
+                  />
+                </div>
               </div>
 
               <div class="form form-phone">
@@ -252,19 +338,33 @@ setTabContent(commonsStore.nowTab)
                   <label for="phone" class="label-name">电话号码</label>
                   <label
                     for="phone"
-                    v-if="validation.phoneVal === false"
+                    v-if="touched.phone && validation.phone.success === false"
                     class="alert"
-                    >此字段为必填项</label
                   >
+                    {{ createErrorMessage('phone', '手机号格式不正确') }}
+                  </label>
                 </div>
-                <input
-                  v-model="commonsStore.personalInfo.phone"
-                  type="text"
-                  id="phone"
-                  placeholder="例如：+86 138 0000 0000"
-                  :class="[{ error: validation.phoneVal === false }]"
-                  required
-                />
+                <div class="input-wrapper">
+                  <input
+                    v-model="commonsStore.personalInfo.phone"
+                    type="text"
+                    id="phone"
+                    @blur="touched.phone = true"
+                    placeholder="例如：+86 138 0000 0000"
+                    :class="[
+                      {
+                        error:
+                          touched.phone && validation.phone.success === false,
+                      },
+                    ]"
+                    required
+                  />
+                  <img
+                    v-if="touched.phone && validation.phone.success"
+                    src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon"
+                  />
+                </div>
               </div>
             </div>
 
