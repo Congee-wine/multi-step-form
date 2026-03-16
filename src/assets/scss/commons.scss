@@ -149,6 +149,19 @@ input {
     color: #12335e;
   }
 
+  .completed {
+    background-color: #82dda4;
+    border-color: #62f799;
+    color: #12335e;
+    cursor: pointer;
+  }
+
+  .visited {
+    border-width: 2px;
+    border-color: #82ddc8;
+    cursor: pointer;
+  }
+
   .item {
     margin-left: 16px;
     line-height: 18px;
@@ -788,5 +801,39 @@ input {
     .notice {
       font-size: 16px;
     }
+  }
+}
+
+// 步骤顺序提示
+.order-tip {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1a365b;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'ubuntu-regular';
+  white-space: nowrap;
+  z-index: 10;
+  animation: fadeInOut 2s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

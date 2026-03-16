@@ -11,6 +11,8 @@ export const useCommonsStore = defineStore(
     const plan = ref<string>('1')
     const isYearly = ref<boolean>(false)
     const totalCost = ref<string>('0')
+    const visitedSteps = ref<string[]>(['1'])
+    const completedSteps = ref<string[]>([])
 
     const personalInfo = reactive<IPersonal>({
       name: '',
@@ -22,6 +24,10 @@ export const useCommonsStore = defineStore(
 
     const setTabActive = (tabId: string) => {
       nowTab.value = tabId
+      // 只要跳转到某个步骤，就记录为已访问
+      if (!visitedSteps.value.includes(tabId)) {
+        visitedSteps.value.push(tabId)
+      }
     }
 
     const setPlanItem = (planId: string) => {
@@ -42,6 +48,12 @@ export const useCommonsStore = defineStore(
       }
     }
 
+    const completeStep = (stepId: string) => {
+      if (!completedSteps.value.includes(stepId)) {
+        completedSteps.value.push(stepId)
+      }
+    }
+
     const clearStorage = () => {
       savedAt.value = Date.now()
       nowTab.value = '1'
@@ -52,6 +64,8 @@ export const useCommonsStore = defineStore(
       personalInfo.name = ''
       personalInfo.phone = ''
       addons.value = []
+      visitedSteps.value = ['1']
+      completedSteps.value = []
     }
 
     const removeStorege = () => {
@@ -66,12 +80,15 @@ export const useCommonsStore = defineStore(
       isYearly,
       addons,
       totalCost,
+      visitedSteps,
+      completedSteps,
 
       setTabActive,
       setPlanItem,
       toggleYearly,
       setAddonItems,
       removeStorege,
+      completeStep,
       clearStorage,
     }
   },

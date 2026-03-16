@@ -2,13 +2,16 @@
 /* eslint-disable */
 // 以上为一个注释指令，
 // 告诉 ESLint（一个代码检查工具）忽略这个文件的所有规则，
-// 通常是为了避免一些不必要的警告。
+// 通常是为了避免一些不必要的警告
 import { computed, ref, reactive, watch, onMounted } from 'vue'
-import { useCommonsStore } from '@/stores/commons'
 import { IContent } from '@/types/content'
-import _ from 'lodash'
 import { IStep2, IStep3 } from '@/types/items'
 import { storeToRefs } from 'pinia'
+
+import _ from 'lodash'
+
+import { useCommonsStore } from '@/stores/commons'
+
 import { isValidEmail, isValidPhone } from '@/utils/validators'
 
 import tabs from '@/assets/data/tabs-info.json'
@@ -44,6 +47,7 @@ const onSubmit = (): void => {
     commonsStore.nowTab === '3' ||
     commonsStore.nowTab === '4'
   ) {
+    commonsStore.completeStep(commonsStore.nowTab)
     setTabContent(String(Number(commonsStore.nowTab) + 1))
   }
 }
@@ -53,11 +57,9 @@ const goBack = (): void => {
 }
 
 // step2
-// let isYearly = computed(() => commonsStore.isYearly)
 const { isYearly } = storeToRefs(commonsStore)
 
 const setOptions = () => {
-  // isYearly = !isYearly
   commonsStore.toggleYearly()
   console.log(isYearly.value)
 }
@@ -103,6 +105,7 @@ const sumCost = () => {
 watch(
   () => commonsStore.nowTab,
   () => {
+    // commonsStore.completeStep(commonsStore.nowTab)
     if (commonsStore.nowTab === '4') {
       sumCost()
     }
@@ -128,17 +131,21 @@ const debouncedForm = reactive({
   phone: '',
 })
 
+const syncPersonalInfoToDebouncedForm = () => {
+  const { name, email, phone } = commonsStore.personalInfo
+
+  debouncedForm.name = name
+  debouncedForm.email = email
+  debouncedForm.phone = phone
+}
+
 onMounted(() => {
-  debouncedForm.name = commonsStore.personalInfo.name
-  debouncedForm.email = commonsStore.personalInfo.email
-  debouncedForm.phone = commonsStore.personalInfo.phone
+  syncPersonalInfoToDebouncedForm()
 })
 
 // 2. 创建防抖更新函数
 const updateDebouncedForm = _.debounce(() => {
-  debouncedForm.name = commonsStore.personalInfo.name
-  debouncedForm.email = commonsStore.personalInfo.email
-  debouncedForm.phone = commonsStore.personalInfo.phone
+  syncPersonalInfoToDebouncedForm()
 }, 300)
 
 // 3. watch 用户输入
@@ -151,7 +158,6 @@ watch(
 )
 
 // 4. computed 使用 debouncedForm 做验证
-
 const nameValidation = computed(() => {
   if (!touched.name) return { required: true, success: true }
 
@@ -231,6 +237,23 @@ const createErrorMessage = (
   })
 }
 
+const showOrderTip = ref(false)
+const handleStepClick = (tabId: string) => {
+  if (commonsStore.nowTab === '5') return
+
+  if (
+    commonsStore.visitedSteps.includes(tabId) ||
+    tabId === commonsStore.nowTab
+  ) {
+    setTabContent(tabId)
+  } else {
+    showOrderTip.value = true
+    setTimeout(() => {
+      showOrderTip.value = false
+    }, 4000)
+  }
+}
+
 // 初始化执行
 setTabContent(commonsStore.nowTab)
 </script>
@@ -243,7 +266,21 @@ setTabContent(commonsStore.nowTab)
           <ul>
             <li v-for="tab in tabs" :key="tab.id" class="step">
               <div
-                :class="['num', { clicked: tab.id === commonsStore.nowTab }]"
+                :class="[
+                  'num',
+                  { clicked: tab.id === commonsStore.nowTab },
+                  {
+                    completed:
+                      commonsStore.completedSteps.includes(tab.id) &&
+                      tab.id !== commonsStore.nowTab,
+                  },
+                  {
+                    visited:
+                      commonsStore.visitedSteps.includes(tab.id) &&
+                      tab.id !== commonsStore.nowTab,
+                  },
+                ]"
+                @click="handleStepClick(tab.id)"
               >
                 {{ tab.id }}
               </div>
@@ -254,6 +291,8 @@ setTabContent(commonsStore.nowTab)
             </li>
           </ul>
         </div>
+
+        <div v-if="showOrderTip" class="order-tip">请按顺序完成步骤</div>
 
         <div class="content">
           <div class="title top-area" v-if="nowContent.title">
