@@ -7,6 +7,7 @@ import { computed, ref, reactive, watch, onMounted } from 'vue'
 import { IContent } from '@/types/content'
 import { IStep2, IStep3 } from '@/types/items'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
 import _ from 'lodash'
 
@@ -18,7 +19,10 @@ import tabs from '@/assets/data/tabs-info.json'
 import content from '@/assets/data/content.json'
 import items from '@/assets/data/items.json'
 
+import LangSwitcher from '@/components/LangSwitcher.vue'
+
 const commonsStore = useCommonsStore()
+const { t } = useI18n()
 
 //left nav
 
@@ -90,11 +94,11 @@ const sumCost = () => {
   commonsStore.addons.forEach((addon: IStep3) => {
     isYearly.value
       ? addonCosts.push(
-          Number(_.cloneDeep(addon).yearly.replace(/[^0-9]/g, '')),
-        )
+        Number(_.cloneDeep(addon).yearly.replace(/[^0-9]/g, '')),
+      )
       : addonCosts.push(
-          Number(_.cloneDeep(addon).monthly.replace(/[^0-9]/g, '')),
-        )
+        Number(_.cloneDeep(addon).monthly.replace(/[^0-9]/g, '')),
+      )
   })
 
   totalCost.value = isYearly.value
@@ -222,15 +226,15 @@ const checkForm = () => {
 // 动态错误消息
 const createErrorMessage = (
   field: 'name' | 'email' | 'phone',
-  messages?: string,
+  formatKey?: string,
 ) => {
   return computed(() => {
     const fieldValidation = validation.value[field]
 
     if (!fieldValidation.required) {
-      return '此字段为必填项'
+      return t('validation.required')
     } else if ('format' in fieldValidation && !fieldValidation.format) {
-      return messages
+      return t(formatKey || 'validation.required')
     }
 
     return ''
@@ -265,144 +269,121 @@ setTabContent(commonsStore.nowTab)
         <div class="navbar">
           <ul>
             <li v-for="tab in tabs" :key="tab.id" class="step">
-              <div
-                :class="[
-                  'num',
-                  { clicked: tab.id === commonsStore.nowTab },
-                  {
-                    completed:
-                      commonsStore.completedSteps.includes(tab.id) &&
-                      tab.id !== commonsStore.nowTab,
-                  },
-                  {
-                    visited:
-                      commonsStore.visitedSteps.includes(tab.id) &&
-                      tab.id !== commonsStore.nowTab,
-                  },
-                ]"
-                @click="handleStepClick(tab.id)"
-              >
+              <div :class="[
+                'num',
+                { clicked: tab.id === commonsStore.nowTab },
+                {
+                  completed:
+                    commonsStore.completedSteps.includes(tab.id) &&
+                    tab.id !== commonsStore.nowTab,
+                },
+                {
+                  visited:
+                    commonsStore.visitedSteps.includes(tab.id) &&
+                    tab.id !== commonsStore.nowTab,
+                },
+              ]" @click="handleStepClick(tab.id)">
                 {{ tab.id }}
               </div>
               <div class="item">
-                <div class="step-nm">{{ tab.step }}</div>
-                <div class="name">{{ tab.name }}</div>
+                <div class="step-nm">{{ t(`steps.step${tab.id}.step`) }}</div>
+                <div class="name">{{ t(`steps.step${tab.id}.name`) }}</div>
               </div>
             </li>
           </ul>
         </div>
 
-        <div v-if="showOrderTip" class="order-tip">请按顺序完成步骤</div>
+        <div v-if="showOrderTip" class="order-tip">
+          {{ t('common.orderTip') }}
+        </div>
 
         <div class="content">
-          <div class="title top-area" v-if="nowContent.title">
-            {{ nowContent.title }}
+          <div class="title top-area" v-if="commonsStore.nowTab !== '5'">
+            {{
+              t(
+                `form.${['personalInfo', 'selectPlan', 'addons', 'summary'][
+                Number(commonsStore.nowTab) - 1
+                ]
+                }.title`,
+              )
+            }}
           </div>
-          <div class="semi-title" v-if="nowContent.semititle">
-            {{ nowContent.semititle }}
+          <div class="semi-title" v-if="commonsStore.nowTab !== '5'">
+            {{
+              t(
+                `form.${['personalInfo', 'selectPlan', 'addons', 'summary'][
+                Number(commonsStore.nowTab) - 1
+                ]
+                }.subtitle`,
+              )
+            }}
           </div>
           <div class="forms">
             <!--          STEP 1          -->
             <div v-if="commonsStore.nowTab === '1'">
               <div class="form form-name">
                 <div class="labels">
-                  <label for="name" class="label-name">姓名</label>
-                  <label
-                    for="name"
-                    v-if="touched.name && validation.name.required === false"
-                    class="alert"
-                  >
+                  <label for="name" class="label-name">{{
+                    t('form.personalInfo.name')
+                  }}</label>
+                  <label for="name" v-if="touched.name && validation.name.required === false" class="alert">
                     {{ createErrorMessage('name') }}
                   </label>
                 </div>
                 <div class="input-wrapper">
-                  <input
-                    v-model="commonsStore.personalInfo.name"
-                    type="text"
-                    id="name"
-                    @blur="touched.name = true"
-                    placeholder="例如：张三"
-                    :class="[
+                  <input v-model="commonsStore.personalInfo.name" type="text" id="name" @blur="touched.name = true"
+                    :placeholder="t('form.personalInfo.namePlaceholder')" :class="[
                       {
                         error:
                           touched.name && validation.name.required === false,
                       },
-                    ]"
-                    required
-                  />
-                  <img
-                    v-if="touched.name && validation.name.success"
-                    src="@/assets/images/icon-checkmark.svg"
-                    class="input-success-icon"
-                  />
+                    ]" required />
+                  <img v-if="touched.name && validation.name.success" src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon" />
                 </div>
               </div>
 
               <div class="form form-email">
                 <div class="labels">
-                  <label for="email" class="label-name">电子邮件地址</label>
-                  <label
-                    for="email"
-                    v-if="touched.email && validation.email.success === false"
-                    class="alert"
-                  >
-                    {{ createErrorMessage('email', '邮箱格式不正确') }}
+                  <label for="email" class="label-name">{{
+                    t('form.personalInfo.email')
+                  }}</label>
+                  <label for="email" v-if="touched.email && validation.email.success === false" class="alert">
+                    {{ createErrorMessage('email', 'validation.emailFormat') }}
                   </label>
                 </div>
                 <div class="input-wrapper">
-                  <input
-                    v-model="commonsStore.personalInfo.email"
-                    type="text"
-                    id="email"
-                    @blur="touched.email = true"
-                    placeholder="例如：zhangsan@example.com"
-                    :class="[
+                  <input v-model="commonsStore.personalInfo.email" type="text" id="email" @blur="touched.email = true"
+                    :placeholder="t('form.personalInfo.emailPlaceholder')" :class="[
                       {
                         error:
                           touched.email && validation.email.success === false,
                       },
-                    ]"
-                    required
-                  />
-                  <img
-                    v-if="touched.email && validation.email.success"
-                    src="@/assets/images/icon-checkmark.svg"
-                    class="input-success-icon"
-                  />
+                    ]" required />
+                  <img v-if="touched.email && validation.email.success" src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon" />
                 </div>
               </div>
 
               <div class="form form-phone">
                 <div class="labels">
-                  <label for="phone" class="label-name">电话号码</label>
-                  <label
-                    for="phone"
-                    v-if="touched.phone && validation.phone.success === false"
-                    class="alert"
-                  >
-                    {{ createErrorMessage('phone', '手机号格式不正确') }}
+                  <label for="phone" class="label-name">{{
+                    t('form.personalInfo.phone')
+                  }}</label>
+                  <label for="phone" v-if="touched.phone && validation.phone.success === false" class="alert">
+                    {{ createErrorMessage('phone', 'validation.phoneFormat') }}
                   </label>
                 </div>
                 <div class="input-wrapper">
-                  <input
-                    v-model="commonsStore.personalInfo.phone"
-                    type="text"
-                    id="phone"
-                    @blur="touched.phone = true"
-                    placeholder="例如：+86 138 0000 0000"
-                    :class="[
+                  <input v-model="commonsStore.personalInfo.phone" type="text" id="phone" @blur="touched.phone = true"
+                    :placeholder="t('form.personalInfo.phonePlaceholder')" :class="[
                       {
                         error:
                           touched.phone && validation.phone.success === false,
                       },
-                    ]"
-                    required
-                  />
-                  <img
-                    v-if="touched.phone && validation.phone.success"
-                    src="@/assets/images/icon-checkmark.svg"
-                    class="input-success-icon"
-                  />
+                    ]" required />
+                  <img v-if="touched.phone && validation.phone.success" src="@/assets/images/icon-checkmark.svg"
+                    class="input-success-icon" />
                 </div>
               </div>
             </div>
@@ -411,29 +392,23 @@ setTabContent(commonsStore.nowTab)
             <div v-else-if="commonsStore.nowTab === '2'">
               <!-- 3 buttons -->
               <div class="options">
-                <button
-                  v-for="item in items.STEP2"
-                  :key="item.name"
-                  :class="[
-                    'option non-selected',
-                    { selected: item.id === commonsStore.plan },
-                  ]"
-                  @click="commonsStore.setPlanItem(item.id)"
-                >
-                  <img
-                    :src="require(`@/assets/images/${item.icon}`)"
-                    class="icon"
-                  />
+                <button v-for="item in items.STEP2" :key="item.id" :class="[
+                  'option non-selected',
+                  { selected: item.id === commonsStore.plan },
+                ]" @click="commonsStore.setPlanItem(item.id)">
+                  <img :src="require(`@/assets/images/${item.icon}`)" class="icon" />
                   <div class="info">
-                    <div class="option-nm card-nm">{{ item.name }}</div>
+                    <div class="option-nm card-nm">{{
+                      t(`form.selectPlan.plans.${item.id}`)
+                    }}</div>
                     <div class="dollar card-des" v-if="!isYearly">
-                      {{ item.monthly }}
+                      {{ t(`form.selectPlan.monthly.${item.id}`) }}
                     </div>
                     <div class="dollar card-des" v-if="isYearly">
-                      {{ item.yearly }}
+                      {{ t(`form.selectPlan.yearly.${item.id}`) }}
                     </div>
                     <div v-if="isYearly" class="discount">
-                      {{ item.discount }}
+                      {{ t('common.discount') }}
                     </div>
                   </div>
                 </button>
@@ -442,20 +417,18 @@ setTabContent(commonsStore.nowTab)
               <!-- toggle -->
               <div class="select-area">
                 <div class="btn-area">
-                  <span :class="['period', { 'm-or-y': !isYearly }]">月度</span>
+                  <span :class="['period', { 'm-or-y': !isYearly }]">{{
+                    t('common.monthly')
+                  }}</span>
                   <span class="toggle">
-                    <input
-                      type="checkbox"
-                      id="toggle"
-                      :checked="isYearly"
-                      @change="setOptions"
-                      hidden
-                    />
+                    <input type="checkbox" id="toggle" :checked="isYearly" @change="setOptions" hidden />
                     <label for="toggle" class="switch">
                       <span class="toggle-btn"></span>
                     </label>
                   </span>
-                  <span :class="['period', { 'm-or-y': isYearly }]">年度</span>
+                  <span :class="['period', { 'm-or-y': isYearly }]">{{
+                    t('common.yearly')
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -463,37 +436,30 @@ setTabContent(commonsStore.nowTab)
             <!--          STEP 3          -->
             <div v-else-if="commonsStore.nowTab === '3'" class="third-step">
               <div class="addons">
-                <button
-                  v-for="addon in items.STEP3"
-                  :key="addon.id"
-                  :class="[
-                    'addon non-selected',
+                <button v-for="addon in items.STEP3" :key="addon.id" :class="[
+                  'addon non-selected',
+                  {
+                    selected: commonsStore.addons.some(
+                      (item) => item.id === addon.id,
+                    ),
+                  },
+                ]" @click="commonsStore.setAddonItems(addon)">
+                  <span :class="[
+                    'checkbox',
                     {
-                      selected: commonsStore.addons.some(
+                      check: commonsStore.addons.some(
                         (item) => item.id === addon.id,
                       ),
                     },
-                  ]"
-                  @click="commonsStore.setAddonItems(addon)"
-                >
-                  <span
-                    :class="[
-                      'checkbox',
-                      {
-                        check: commonsStore.addons.some(
-                          (item) => item.id === addon.id,
-                        ),
-                      },
-                    ]"
-                  >
+                  ]">
                     <img src="@/assets/images/icon-checkmark.svg" />
                   </span>
                   <div class="txts">
-                    <div class="card-nm">{{ addon.title }}</div>
-                    <div class="card-des">{{ addon.semititle }}</div>
+                    <div class="card-nm">{{ t(`form.addons.items.${addon.id}.title`) }}</div>
+                    <div class="card-des">{{ t(`form.addons.items.${addon.id}.subtitle`) }}</div>
                   </div>
-                  <div class="price" v-if="!isYearly">{{ addon.monthly }}</div>
-                  <div class="price" v-if="isYearly">{{ addon.yearly }}</div>
+                  <div class="price" v-if="!isYearly">{{ t(`form.addons.monthly.${addon.id}`) }}</div>
+                  <div class="price" v-if="isYearly">{{ t(`form.addons.yearly.${addon.id}`) }}</div>
                 </button>
               </div>
             </div>
@@ -501,50 +467,45 @@ setTabContent(commonsStore.nowTab)
             <!--          STEP 4          -->
             <div v-else-if="commonsStore.nowTab === '4'" class="finishing">
               <div class="costs">
-                <div
-                  :class="[
-                    'plan-wrap',
-                    { plus: commonsStore.addons.length !== 0 },
-                  ]"
-                >
+                <div :class="[
+                  'plan-wrap',
+                  { plus: commonsStore.addons.length !== 0 },
+                ]">
                   <div class="plan">
                     <div class="name impt-txt">
-                      <div>{{ nowPlan.name }}</div>
-                      <div v-if="!isYearly">&nbsp;（月度）</div>
-                      <div v-if="isYearly">&nbsp;（年度）</div>
+                      <div>{{ t(`form.selectPlan.plans.${nowPlan.id}`) }}</div>
+                      <div v-if="!isYearly">
+                        &nbsp;（{{ t('common.monthly') }}）
+                      </div>
+                      <div v-if="isYearly">
+                        &nbsp;（{{ t('common.yearly') }}）
+                      </div>
                     </div>
-                    <div
-                      @click="() => (commonsStore.nowTab = '2')"
-                      class="change-plan"
-                    >
-                      更改
+                    <div @click="() => (commonsStore.nowTab = '2')" class="change-plan">
+                      {{ t('common.change') }}
                     </div>
                   </div>
                   <div class="plan-cost mg-lft impt-txt">
                     <span class="">{{
-                      isYearly ? nowPlan.yearly : nowPlan.monthly
+                      isYearly ? t(`form.selectPlan.yearly.${nowPlan.id}`) : t(`form.selectPlan.monthly.${nowPlan.id}`)
                     }}</span>
                   </div>
                 </div>
 
                 <div class="addon-wrap" v-if="commonsStore.addons.length !== 0">
-                  <div
-                    v-for="addon in commonsStore.addons"
-                    :key="addon.id"
-                    class="addons"
-                  >
-                    <span>{{ addon.title }}</span>
+                  <div v-for="addon in commonsStore.addons" :key="addon.id" class="addons">
+                    <span>{{ t(`form.addons.items.${addon.id}.title`) }}</span>
                     <div class="addon-cost mg-lft">
-                      <span v-if="!isYearly">{{ addon.monthly }}</span>
-                      <span v-if="isYearly">{{ addon.yearly }}</span>
+                      <span v-if="!isYearly">{{ t(`form.addons.monthly.${addon.id}`) }}</span>
+                      <span v-if="isYearly">{{ t(`form.addons.yearly.${addon.id}`) }}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="total">
-                <span v-if="!isYearly">总计（每月）</span>
-                <span v-if="isYearly">总计（每年）</span>
+                <span v-if="!isYearly">{{ t('common.monthlyTotal') }}</span>
+                <span v-if="isYearly">{{ t('common.yearlyTotal') }}</span>
                 <span class="total-cost mg-lft">{{ totalCost }}</span>
               </div>
             </div>
@@ -552,46 +513,27 @@ setTabContent(commonsStore.nowTab)
             <!--          Thank you page          -->
             <div v-if="commonsStore.nowTab === '5'">
               <div class="appreciate">
-                <img
-                  src="@/assets/images/icon-thank-you.svg"
-                  class="thankyou-icon"
-                />
-                <div class="thank-you">感谢您的订阅！</div>
-                <div class="notice">
-                  感谢您确认订阅！我们希望您使用愉快。如果您需要任何支持，请随时发送电子邮件至
-                  support@loremgaming.com 联系我们。
-                </div>
+                <img src="@/assets/images/icon-thank-you.svg" class="thankyou-icon" />
+                <div class="thank-you">{{ t('common.thankYou') }}</div>
+                <div class="notice">{{ t('common.thankYouNotice') }}</div>
               </div>
             </div>
           </div>
-          <div
-            :class="['btns', { none: commonsStore.nowTab === '5' }]"
-            v-if="commonsStore.nowTab !== '5'"
-          >
-            <button
-              class="lft-btn"
-              @click="goBack"
-              v-if="commonsStore.nowTab !== '1'"
-            >
-              返回
+          <div :class="['btns', { none: commonsStore.nowTab === '5' }]" v-if="commonsStore.nowTab !== '5'">
+            <button class="lft-btn" @click="goBack" v-if="commonsStore.nowTab !== '1'">
+              {{ t('common.back') }}
             </button>
-            <button
-              class="rgt-btn"
-              v-if="commonsStore.nowTab !== '4'"
-              @click="onSubmit"
-            >
-              下一步
+            <button class="rgt-btn" v-if="commonsStore.nowTab !== '4'" @click="onSubmit">
+              {{ t('common.next') }}
             </button>
-            <button
-              class="rgt-btn confirm"
-              v-else-if="commonsStore.nowTab === '4'"
-              @click="onSubmit"
-            >
-              确认
+            <button class="rgt-btn confirm" v-else-if="commonsStore.nowTab === '4'" @click="onSubmit">
+              {{ t('common.confirm') }}
             </button>
           </div>
         </div>
       </div>
+
+      <LangSwitcher />
     </div>
   </div>
 </template>
