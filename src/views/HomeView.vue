@@ -221,6 +221,9 @@ const isFormValid = computed(() => {
 })
 
 const checkForm = () => {
+  touched.name = true
+  touched.email = true
+  touched.phone = true
   return isFormValid.value
 }
 
