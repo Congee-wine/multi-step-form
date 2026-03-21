@@ -4,6 +4,7 @@ import router from './router'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import { useCommonsStore } from './stores/commons'
+import { useThemeStore } from './stores/theme'
 import { i18n } from './locales'
 
 const app = createApp(App)
@@ -13,6 +14,9 @@ pinia.use(createPersistedState())
 app.use(router)
 app.use(pinia)
 app.use(i18n)
+
+const themeStore = useThemeStore()
+themeStore.initTheme()
 
 const commonsStore = useCommonsStore()
 

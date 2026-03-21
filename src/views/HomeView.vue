@@ -20,6 +20,7 @@ import content from '@/assets/data/content.json'
 import items from '@/assets/data/items.json'
 
 import LangSwitcher from '@/components/LangSwitcher.vue'
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
 const commonsStore = useCommonsStore()
 const { t } = useI18n()
@@ -534,6 +535,7 @@ setTabContent(commonsStore.nowTab)
       </div>
 
       <LangSwitcher />
+      <ThemeSwitcher />
     </div>
   </div>
 </template>

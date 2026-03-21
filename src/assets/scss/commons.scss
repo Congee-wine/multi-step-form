@@ -1,10 +1,35 @@
+:root {
+  --app-bg: #eef5ff;
+  --surface: #ffffff;
+  --text: #1a365b;
+  --muted: #95969b;
+  --border: #d9d9db;
+  --primary: #483eff;
+  --primary-contrast: #ffffff;
+  --tip-bg: #1a365b;
+  --tip-text: #ffffff;
+}
+
+html[data-theme='dark'] {
+  --app-bg: #0b1220;
+  --surface: #121a2a;
+  --text: #e7eefc;
+  --muted: #a6b3cc;
+  --border: #2b3750;
+  --primary: #7c79ff;
+  --primary-contrast: #0b1220;
+  --tip-bg: #1a2a49;
+  --tip-text: #e7eefc;
+}
+
 body {
   min-height: 100%;
   min-width: 1024px;
   width: 100%;
   height: auto;
 
-  background-color: #eef5ff;
+  background-color: var(--app-bg);
+  color: var(--text);
 }
 
 ul li {
@@ -36,8 +61,8 @@ input {
 
 //button css
 .non-selected {
-  background-color: white;
-  border: 1px solid #d9d9db;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 10px;
   cursor: pointer;
 }
@@ -48,7 +73,7 @@ input {
 }
 
 .selected {
-  background-color: #f8f9fe;
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--surface));
   border: 1px solid #534d93;
 }
 
@@ -56,12 +81,12 @@ input {
 .card-nm {
   font-family: 'ubuntu-bold';
   font-size: 16px;
-  color: #1a365b;
+  color: var(--text);
 }
 
 .card-des {
   font-size: 14px;
-  color: #95969b;
+  color: var(--muted);
 }
 
 //margin
@@ -72,7 +97,7 @@ input {
 //text
 .impt-txt {
   font-family: 'ubuntu-bold';
-  color: #1a365b;
+  color: var(--text);
 }
 
 //font
@@ -105,7 +130,7 @@ input {
 
   @media (min-width: 971px) {
     .box {
-      background-color: white;
+      background-color: var(--surface);
       width: 100%;
       height: 100%;
 
@@ -194,11 +219,11 @@ input {
     .title {
       font-family: 'ubuntu-bold';
       font-size: 30px;
-      color: #1a365b;
+      color: var(--text);
     }
 
     .semi-title {
-      color: #95969b;
+      color: var(--muted);
     }
   }
 }
@@ -206,6 +231,7 @@ input {
 // 文本表单
 .form {
   margin-bottom: 20px;
+
   label {
     font-size: 14px;
   }
@@ -240,12 +266,13 @@ input {
 
   input {
     font-family: 'ubuntu-bold';
-    border: 1px solid #d9d9db;
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 15px;
     width: calc(100% - 30px);
     font-size: 16px;
-    color: #1a365b;
+    color: var(--text);
+    background-color: var(--surface);
   }
 
   input:focus {
@@ -256,7 +283,7 @@ input {
 
   input::placeholder {
     font-family: 'ubuntu-regular';
-    color: #98979d;
+    color: var(--muted);
   }
 }
 
@@ -298,7 +325,7 @@ input {
 }
 
 .btn-area {
-  background-color: #f8f9fe;
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--surface));
   padding: 15px;
 
   border-radius: 11px;
@@ -351,7 +378,7 @@ input {
   background: white;
 }
 
-#toggle:checked ~ .switch .toggle-btn {
+#toggle:checked~.switch .toggle-btn {
   left: 75%;
 }
 
@@ -412,7 +439,7 @@ input {
 /* ------------------------------ STEP 4 ------------------------------ */
 
 .costs {
-  background-color: #f8f9fe;
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--surface));
   padding: 20px 30px;
   border-radius: 10px;
 
@@ -487,16 +514,18 @@ input {
 .thank-you {
   font-family: 'ubuntu-bold';
   font-size: 30px;
-  color: #1a365b;
+  color: var(--text);
 }
+
 .notice {
   line-height: 25px;
-  color: #93939b;
+  color: var(--muted);
 }
 
 /* ------------------------------ BUTTONS ------------------------------ */
 
 @media (min-width: 971px) {
+
   .rgt-btn,
   .lft-btn {
     cursor: pointer;
@@ -509,35 +538,33 @@ input {
   .rgt-btn {
     width: 110.24px;
     float: right;
-    color: white;
-    background-color: #03295a;
-    border: 1px solid #03295a;
+    color: var(--primary-contrast);
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
   }
 }
 
 .lft-btn {
-  color: #93939b;
-  background-color: white;
-  border: 1px solid white;
+  color: var(--muted);
+  background-color: transparent;
+  border: 1px solid transparent;
 }
 
 .rgt-btn:hover {
-  background-color: #174a89;
-  border: 1px solid #174a89;
+  filter: brightness(1.08);
 }
 
 .confirm {
-  background-color: #413eff !important;
-  border: 1px solid #413eff !important;
+  background-color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
 }
 
 .confirm:hover {
-  background-color: #6865ff !important;
-  border: 1px solid #6865ff !important;
+  filter: brightness(1.12);
 }
 
 .lft-btn:hover {
-  color: #03295a;
+  color: var(--text);
 }
 
 /* ------------------------------------------------------------------------------------------------------------------------
@@ -548,12 +575,12 @@ input {
 
 @media (max-width: 971px) {
   body {
-    background-color: white;
+    background-color: var(--app-bg);
   }
 
   #container {
     width: 375px;
-    background-color: #eef5ff;
+    background-color: var(--app-bg);
     height: 100vh;
     min-height: 667px;
 
@@ -578,11 +605,13 @@ input {
 
     .step {
       margin: 0;
+
       .num {
         padding: 7px 13px;
         margin: 0px 8px;
         display: flex;
       }
+
       .item {
         margin: 0;
         display: none;
@@ -592,7 +621,7 @@ input {
 
   .content {
     font-family: 'ubuntu-regular';
-    background-color: white;
+    background-color: var(--surface);
     border-radius: 10px;
     //width: 290px;
     height: auto;
@@ -606,11 +635,11 @@ input {
     .title {
       font-family: 'ubuntu-bold';
       font-size: 24px;
-      color: #1a365b;
+      color: var(--text);
     }
 
     .semi-title {
-      color: #95969b;
+      color: var(--muted);
       width: 280px;
       line-height: 23px;
     }
@@ -810,8 +839,8 @@ input {
   top: -45px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1a365b;
-  color: white;
+  background-color: var(--tip-bg);
+  color: var(--tip-text);
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 14px;
@@ -826,13 +855,16 @@ input {
     opacity: 0;
     transform: translateX(-50%) translateY(6px);
   }
+
   15% {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+
   75% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

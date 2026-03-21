@@ -12,4 +12,8 @@ export default {
   thankYouNotice:
     '感谢您确认订阅！我们希望您使用愉快。如果您需要任何支持，请随时发送电子邮件至 support@loremgaming.com 联系我们。',
   orderTip: '请按顺序完成步骤',
+  themeLabel: '主题',
+  themeLight: '白天',
+  themeDark: '夜间',
+  themeCurrent: '主题：{mode}',
 }
